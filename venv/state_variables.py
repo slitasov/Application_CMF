@@ -88,7 +88,6 @@ for the third PSUB
 
 def s_timestamp(system_params, substep, state_history, previous_state, policy_input):
     updated_timestamp = previous_state['timestamp'] + 1
-    print(updated_timestamp)
 
 
     return "timestamp", updated_timestamp

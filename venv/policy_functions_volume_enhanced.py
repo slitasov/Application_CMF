@@ -1,7 +1,7 @@
 from initial_state import *
 
-def p_optimal_orders(system_params, substep, state_history, previous_state):
 
+def p_optimal_orders(system_params, substep, state_history, previous_state):
     # Extracting relevant system parameters
     book_data = system_params['book data']
     trades_data = system_params['trades data']
@@ -31,8 +31,6 @@ def p_optimal_orders(system_params, substep, state_history, previous_state):
 
 
 def p_execute_orders(system_params, substep, state_history, previous_state):
-
-
     # Extract system parameters from the previous state.
     timestamp = previous_state['timestamp']
     q = previous_state['q']
@@ -54,10 +52,8 @@ def p_execute_orders(system_params, substep, state_history, previous_state):
     book_upd_time = book_data['local_timestamp']
     next_book_upd_time = system_params['book data'].loc[timestamp + 1]['local_timestamp']
 
-    # Volume imbalance implementation
     v_a = book_data[f'asks[{0}].amount']
     v_b = book_data[f'bids[{0}].amount']
-
     p = (v_b - v_a) / (v_b + v_a)
 
     # Get the previous placed order time.
@@ -69,22 +65,29 @@ def p_execute_orders(system_params, substep, state_history, previous_state):
     # Add new orders if conditions are met.
     if book_upd_time - previous_placed_order_time > system_params['delay']:
 
+        p = (v_b - v_a) / (v_b + v_a)
+
         if p > 0:
-            p = min(0.15 + p, 1)
+            p = min(0.85 + p, 1)
         else:
-            p = max(0.8 - p, 0)
+            p = min(1.85 - p, 1)
 
         order_size = size * p
 
         active_orders.append(
             {'id': timestamp, 'side': 'BID', 'place_time': book_upd_time, 'close_time': '-', 'type': '-', 'size': size,
              'price_open': optimal_bid})
+
         q += order_size
 
+        p = (v_b - v_a) / (v_b + v_a)
+
         if p < 0:
-            p = min(0.15 + abs(p), 1)
+            p = min(0.85 + abs(p), 1)
         else:
-            p = max(0.8 - abs(p), 0)
+            p = min(1.85 - abs(p), 1)
+
+        order_size = size * p
 
         active_orders.append(
             {'id': timestamp, 'side': 'ASK', 'place_time': book_upd_time, 'close_time': '-', 'type': '-', 'size': size,

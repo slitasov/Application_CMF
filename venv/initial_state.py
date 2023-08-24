@@ -14,8 +14,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-df_book = pd.read_csv('/Users/slitasov/Downloads/book.csv', nrows=3000)
-df_trades = pd.read_csv('/Users/slitasov/Downloads/trades.csv', nrows=10000)
+df_book = pd.read_csv('/Users/slitasov/Downloads/book.csv', nrows=10000)
+df_trades = pd.read_csv('/Users/slitasov/Downloads/trades.csv', nrows=35000)
 
 # Initial state
 initial_state = {
