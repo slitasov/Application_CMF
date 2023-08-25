@@ -1,6 +1,6 @@
 # Application_CMF
 
-This repository contains my answers to the two challenges given during the CMF program application process.
+This repository contains my solutions to the two tasks given during the CMF program application process.
 
 The challenges include:
 
